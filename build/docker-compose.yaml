@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8090:8080
+  postgres:
+    image: postgres:13.3
+    environment:
+      POSTGRES_DB: "shop"
+      POSTGRES_USER: "rat"
+      POSTGRES_PASSWORD: "12345"
+    ports:
+        - "8080:5432"
+    volumes:
+      - './_postgresql/:/docker-entrypoint-initdb.d/'
