@@ -12,6 +12,4 @@ services:
       POSTGRES_USER: "rat"
       POSTGRES_PASSWORD: "12345"
     ports:
-        - "8080:5432"
-    volumes:
-      - './_postgresql/:/docker-entrypoint-initdb.d/'
+        - "8008:5432"

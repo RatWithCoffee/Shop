@@ -19,7 +19,7 @@ import (
 	"os"
 )
 
-const defaultPort = "8081"
+const defaultPort = "8080"
 
 func init() {
 	if err := godotenv.Load(); err != nil {
@@ -28,12 +28,7 @@ func init() {
 }
 
 func GetApp() http.Handler {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = defaultPort
-	}
-
-	dsn := "host=localhost user=rat dbname=shop password=12345 port=8080 sslmode=disable"
+	dsn := "host=localhost user=rat dbname=shop password=12345 port=8008 sslmode=disable"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{DisableForeignKeyConstraintWhenMigrating: true, Logger: logger.Default.LogMode(logger.Info)})
 	if err != nil {
 		panic(err)
@@ -56,7 +51,7 @@ func GetApp() http.Handler {
 	muxAuth.Handle("/", auth)
 	muxAuth.HandleFunc("/register", userHandler.RegistrationHandler)
 
-	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
+	log.Printf("connect to http://localhost:%s/ for GraphQL playground", defaultPort)
 	return muxAuth
 }
 
@@ -70,7 +65,7 @@ func authorized(ctx context.Context, obj interface{}, next graphql.Resolver) (in
 }
 
 func initDb(db *gorm.DB) {
-	c, ioErr := os.ReadFile("../build/_postgresql/init_db.sql")
+	c, ioErr := os.ReadFile("./build/_postgresql/init_db.sql")
 	if ioErr != nil {
 		panic(ioErr)
 	}
